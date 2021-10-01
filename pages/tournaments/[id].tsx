@@ -10,9 +10,10 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  AccordionItemProps,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { findTournament, Tournament } from "../../services/tournament.service";
 import { Loading } from "../../components/Loading";
 import { centsToBrlCurrency } from "../../utils/centsToBrlCurrency";
@@ -24,6 +25,14 @@ import {
 } from "../../components/InfoCard/";
 import { format } from "date-fns";
 
+const StyledAccordionItem = (props: AccordionItemProps) => (
+  <AccordionItem
+    borderColor={useColorModeValue("pink.200", "pink.800")}
+    _last={{}}
+    {...props}
+  />
+);
+
 const TournamentPage: NextPage = () => {
   const router = useRouter();
   const toast = useToast();
@@ -32,29 +41,29 @@ const TournamentPage: NextPage = () => {
 
   const [isLoading, setLoading] = useState<boolean>(false);
 
-  async function loadTournament(tournamentId: string) {
-    try {
-      setLoading(true);
-      const data = await findTournament(tournamentId);
-      console.log(data);
-      setTournament(data!);
-    } catch (err: any) {
-      toast({
-        isClosable: true,
-        title: "Erro ao carregar torneio",
-        description: err.message,
-        status: "error",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
+    async function loadTournament(tournamentId: string) {
+      try {
+        setLoading(true);
+        const data = await findTournament(tournamentId);
+        console.log(data);
+        setTournament(data!);
+      } catch (err: any) {
+        toast({
+          isClosable: true,
+          title: "Erro ao carregar torneio",
+          description: err.message,
+          status: "error",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+
     if (id) {
       loadTournament(id as string);
     }
-  }, [id]);
+  }, [id, toast]);
 
   return isLoading ? (
     <Loading color="pink.500" pt={[12, 16]} />
@@ -95,11 +104,7 @@ const TournamentPage: NextPage = () => {
         <InfoCardContent>
           <Accordion allowToggle>
             {tournament?.categories?.map((c) => (
-              <AccordionItem
-                key={c.uuid}
-                borderColor={useColorModeValue("pink.200", "pink.800")}
-                _last={{}}
-              >
+              <StyledAccordionItem key={c.uuid}>
                 <h4>
                   <AccordionButton px={6}>
                     <Box flex="1" textAlign="left">
@@ -115,7 +120,7 @@ const TournamentPage: NextPage = () => {
                       ))
                     : "Nenhuma equipe cadastrada."}
                 </AccordionPanel>
-              </AccordionItem>
+              </StyledAccordionItem>
             ))}
           </Accordion>
         </InfoCardContent>
