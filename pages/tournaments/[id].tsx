@@ -37,7 +37,7 @@ const TournamentPage: NextPage = () => {
   const router = useRouter();
   const toast = useToast();
   const { id } = router.query;
-  const [tournament, setTournament] = useState<Tournament>();
+  const [tournament, setTournament] = useState<Tournament | null>();
 
   const [isLoading, setLoading] = useState<boolean>(false);
 
@@ -46,8 +46,7 @@ const TournamentPage: NextPage = () => {
       try {
         setLoading(true);
         const data = await findTournament(tournamentId);
-        console.log(data);
-        setTournament(data!);
+        setTournament(data);
       } catch (err: any) {
         toast({
           isClosable: true,
@@ -60,10 +59,10 @@ const TournamentPage: NextPage = () => {
       }
     }
 
-    if (id) {
+    if (id && !tournament) {
       loadTournament(id as string);
     }
-  }, [id, toast]);
+  }, [id, toast, tournament]);
 
   return isLoading ? (
     <Loading color="pink.500" pt={[12, 16]} />
