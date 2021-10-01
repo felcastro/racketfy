@@ -4,13 +4,16 @@ import {
   Heading,
   FlexProps,
   useBreakpointValue,
+  Avatar,
   HStack,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import { ColorModeButton } from "../ColorModeButton";
 
 export const Navbar = (props: FlexProps) => {
+  const { user } = useAuth();
 
   return (
     <Flex
@@ -40,6 +43,7 @@ export const Navbar = (props: FlexProps) => {
       </Link>
       <HStack align="center">
         <ColorModeButton colorScheme="pink" />
+        {user && <Avatar size="sm" />}
       </HStack>
     </Flex>
   );
