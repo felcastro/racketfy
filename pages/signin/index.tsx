@@ -37,7 +37,6 @@ export default function SignIn() {
     formState: { errors, isSubmitting },
     watch,
   } = useForm<SignInFormParams>({
-    //@ts-ignore
     resolver: yupResolver(signInFormSchema),
   });
   const watchFields = watch();
