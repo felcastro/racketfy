@@ -3,6 +3,7 @@ import {
   Heading,
   Box,
   Flex,
+  Stack,
   useColorModeValue,
   useToast,
   Accordion,
@@ -11,6 +12,8 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionItemProps,
+  Badge,
+  BadgeProps,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -23,7 +26,27 @@ import {
   InfoCardData,
   InfoCardHeader,
 } from "../../components/InfoCard/";
-import { format } from "date-fns";
+import { format, isPast, isToday } from "date-fns";
+
+interface TournamentStatusBadgeProps extends BadgeProps {
+  date: Date;
+}
+
+const TournamentStatusBadge = ({
+  date,
+  ...props
+}: TournamentStatusBadgeProps) => {
+  const status = isPast(date)
+    ? { label: "Finalizado" }
+    : isToday(date)
+    ? { label: "Em Andamento", colorScheme: "blue" }
+    : { label: "Aberto", colorScheme: "green" };
+  return (
+    <Badge colorScheme={status.colorScheme} {...props}>
+      {status.label}
+    </Badge>
+  );
+};
 
 const StyledAccordionItem = (props: AccordionItemProps) => (
   <AccordionItem
@@ -67,12 +90,17 @@ const TournamentPage: NextPage = () => {
   return isLoading ? (
     <Loading color="pink.500" pt={[12, 16]} />
   ) : (
-    <Box>
-      <Flex justify="space-between" py={[4, 8]}>
+    <Box pt={[4, 8]}>
+      <Stack direction="row" mb={[4, 8]}>
         <Heading as="h2" size="lg">
           {tournament?.name}
         </Heading>
-      </Flex>
+        <Box>
+          {tournament?.date && (
+            <TournamentStatusBadge date={new Date(tournament.date)} />
+          )}
+        </Box>
+      </Stack>
       <InfoCard>
         <InfoCardHeader>
           <Heading as="h3" size="md">
