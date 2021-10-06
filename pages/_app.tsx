@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Container
             minH="calc(100vh - 3.5rem)"
             maxW="container.lg"
-            px={[2, 0]}
+            px={[2, 2, 2, 0]}
             py={2}
           >
             <Component {...pageProps} />
