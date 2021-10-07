@@ -21,8 +21,8 @@ export interface Tournament {
   userUuid: string;
   name: string;
   location?: string;
-  date?: string;
-  price?: number;
+  date: string;
+  price: number;
   categories: Category[];
   createdAt: string;
   updatedAt: string;
@@ -33,6 +33,7 @@ export async function findTournament(uuid: string) {
     .from<Tournament>("tournaments")
     .select(`*, categories (*, teams (*))`)
     .filter("uuid", "eq", uuid)
+    .limit(1)
     .single();
 
   if (error) {
