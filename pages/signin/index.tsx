@@ -53,7 +53,7 @@ export default function SignIn() {
     if (error) {
       toast({
         ...defaultToastSettings,
-        title: `Problema ao entrar`,
+        title: 'Problema ao entrar',
         description: error.message,
         status: "error",
       });
