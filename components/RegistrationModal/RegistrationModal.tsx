@@ -1,14 +1,10 @@
 import { useRouter } from "next/router";
 import {
   Text,
-  Box,
   Button,
   Stack,
   Flex,
-  useColorModeValue,
   useToast,
-  Accordion,
-  AccordionButton,
   FormErrorMessage,
   InputGroup,
   IconButton,
@@ -25,11 +21,16 @@ import {
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
-import { Tournament } from "../../services/tournament.service";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import { Tournament } from "../../services/tournament.service";
+import {
+  createRegistration,
+  RegistrationStatus,
+} from "../../services/registration.service";
 
 interface RegistrationFormParams {
   category: string;
@@ -86,26 +87,34 @@ export const RegistrationModal = ({
   }
 
   async function onSubmit(data: RegistrationFormParams) {
-    const payload = {
-      tournament_uuid: tournament.uuid,
+    const registration = {
       category_uuid: data.category,
       players: data.players.map((p) => p.name),
+      status: RegistrationStatus.Pending,
     };
 
-    await new Promise((r) => setTimeout(r, 2000));
-    console.log(payload);
+    try {
+      await createRegistration(registration);
 
-    toast({
-      isClosable: true,
-      title: "Inscrição enviada!",
-      description: "Sua solicitação de inscrição foi enviada com sucesso.",
-      status: "success",
-      position: "top",
-      duration: 10000,
-    });
+      toast({
+        isClosable: true,
+        title: "Inscrição enviada!",
+        description: "Sua solicitação de inscrição foi enviada com sucesso.",
+        status: "success",
+        position: "top",
+        duration: 10000,
+      });
 
-    reset();
-    onClose();
+      reset();
+      onClose();
+    } catch (err: any) {
+      toast({
+        isClosable: true,
+        title: "Erro ao carregar torneio",
+        description: err.message,
+        status: "error",
+      });
+    }
   }
 
   return (

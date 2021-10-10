@@ -15,13 +15,6 @@ import {
   AccordionItemProps,
   Badge,
   BadgeProps,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
@@ -164,8 +157,8 @@ const TournamentPage: NextPage = () => {
                       </AccordionButton>
                     </h4>
                     <AccordionPanel pb={4} px={6}>
-                      {c.teams.length > 0
-                        ? c.teams.map((t) => (
+                      {c.registrations.length > 0
+                        ? c.registrations.map((t) => (
                             <Box key={t.uuid}>{t.players.join(" e ")}</Box>
                           ))
                         : "Nenhuma equipe cadastrada."}
