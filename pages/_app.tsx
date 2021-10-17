@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Navbar />
           <Container
             minH="calc(100vh - 3.5rem)"
-            maxW="container.lg"
+            maxW="container.sm"
             px={[2, 2, 2, 0]}
             py={2}
           >
