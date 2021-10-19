@@ -1,10 +1,6 @@
 import { supabase } from "../config/supabase";
 
-export enum RegistrationStatus {
-  Pending = "PENDING",
-  Approved = "APPROVED",
-  Rejected = "REJECTED",
-}
+export type RegistrationStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export interface Registration {
   uuid: string;
@@ -16,7 +12,7 @@ export interface Registration {
 }
 
 export async function createRegistration(
-  registration: Omit<Registration, "uuid" | "created_at" | "updated_at">
+  registration: Pick<Registration, "category_uuid" | "players" | "status">
 ) {
   let { data, error } = await supabase
     .from<Registration>("registrations")
