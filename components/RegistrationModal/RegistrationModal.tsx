@@ -90,7 +90,7 @@ export const RegistrationModal = ({
     const registration = {
       category_uuid: data.category,
       players: data.players.map((p) => p.name),
-      status: RegistrationStatus.Pending,
+      status: "PENDING" as RegistrationStatus,
     };
 
     try {
